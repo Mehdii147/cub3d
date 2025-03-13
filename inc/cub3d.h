@@ -16,8 +16,8 @@
 
 # define SCALE 64
 # define FOV 60
-# define SPEED 300
-# define ROTATE 10
+# define SPEED 100
+# define ROTATE 4
 # define W_WIDTH 1200
 # define W_HEIGHT 900
 

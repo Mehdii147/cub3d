@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/ehafiane/1337/cub3d/parsing",
-      "program": "/Users/ehafiane/1337/cub3d/parsing/build/Debug/outDebug"
+      "cwd": "/Users/ehafiane/1337/cub3d",
+      "program": "/Users/ehafiane/1337/cub3d/build/Debug/outDebug"
     }
   ]
 }

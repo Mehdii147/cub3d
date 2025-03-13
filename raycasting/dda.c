@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 03:20:01 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/03/13 04:48:11 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:00:26 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,181 @@ void draw_player(t_map *map)
     {
         int x = player_x + cos(map->p_pos.ang) * t;
         int y = player_y + sin(map->p_pos.ang) * t;
-        my_mlx_pixel_put(&map->img, x, y, 0xFFFF00FF); // Yellow direction line
+        my_mlx_pixel_put(&map->img, x, y, 0x00FF00FF); // Yellow direction line
+    }
+}
+
+
+t_pos get_best_intersection(t_map *map, double r_ang)
+{
+    t_pos intersection;
+    t_pos horz_inter, vert_inter;
+    float horz_dist = INFINITY, vert_dist = INFINITY;
+    
+    // Player position
+    float p_x = map->p_pos.x;
+    float p_y = map->p_pos.y;
+    
+    // Normalize angle
+    while (r_ang < 0)
+        r_ang += 2 * M_PI;
+    while (r_ang >= 2 * M_PI)
+        r_ang -= 2 * M_PI;
+    
+    // HORIZONTAL RAY-GRID INTERSECTION CODE
+    {
+        // Find the y-coordinate of the closest horizontal grid intersection
+        float y_intercept = floor(p_y / SCALE) * SCALE;
+        // If ray is facing down, move to the next grid line
+        if (sin(r_ang) > 0)
+            y_intercept += SCALE;
+        
+        // Find the x-coordinate of the closest horizontal grid intersection
+        float x_intercept = p_x + (y_intercept - p_y) / tan(r_ang);
+        
+        // Calculate the increment steps
+        float y_step = SCALE;
+        // If ray is facing up, we need to step upward in the grid
+        if (sin(r_ang) < 0)
+            y_step *= -1;
+        
+        // Calculate the x-step value using trigonometry
+        float x_step = SCALE / tan(r_ang);
+        if ((cos(r_ang) < 0 && x_step > 0) || (cos(r_ang) > 0 && x_step < 0))
+            x_step *= -1;
+        
+        // Start the next intersection at the first intersection point
+        float next_x = x_intercept;
+        float next_y = y_intercept;
+        
+        // Check if the ray is exactly horizontal
+        if (sin(r_ang) == 0)
+            horz_dist = INFINITY;
+        else
+        {
+            // Loop to find the wall hit
+            bool hit_wall = false;
+            while (!hit_wall && next_x >= 0 && next_x < map->map_w * SCALE && 
+                   next_y >= 0 && next_y < map->map_h * SCALE)
+            {
+                // Calculate the grid cell to check
+                int map_x = floor(next_x / SCALE);
+                // If looking up, check one cell up
+                int map_y = floor(next_y / SCALE) - (sin(r_ang) < 0 ? 1 : 0);
+                
+                // Check if the cell is a wall
+                if (map_x >= 0 && map_x < map->map_w && map_y >= 0 && map_y < map->map_h && 
+                    map->map[map_y][map_x] == '1')
+                {
+                    hit_wall = true;
+                    horz_inter.x = next_x;
+                    horz_inter.y = next_y;
+                    horz_dist = sqrt(pow(horz_inter.x - p_x, 2) + pow(horz_inter.y - p_y, 2));
+                }
+                else
+                {
+                    // If no wall, move to next intersection
+                    next_x += x_step;
+                    next_y += y_step;
+                }
+            }
+        }
+    }
+    
+    // VERTICAL RAY-GRID INTERSECTION CODE
+    {
+        // Find the x-coordinate of the closest vertical grid intersection
+        float x_intercept = floor(p_x / SCALE) * SCALE;
+        // If ray is facing right, move to the next grid line
+        if (cos(r_ang) > 0)
+            x_intercept += SCALE;
+        
+        // Find the y-coordinate of the closest vertical grid intersection
+        float y_intercept = p_y + (x_intercept - p_x) * tan(r_ang);
+        
+        // Calculate the increment steps
+        float x_step = SCALE;
+        // If ray is facing left, we need to step leftward in the grid
+        if (cos(r_ang) < 0)
+            x_step *= -1;
+        
+        // Calculate the y-step value using trigonometry
+        float y_step = SCALE * tan(r_ang);
+        if ((sin(r_ang) < 0 && y_step > 0) || (sin(r_ang) > 0 && y_step < 0))
+            y_step *= -1;
+        
+        // Start the next intersection at the first intersection point
+        float next_x = x_intercept;
+        float next_y = y_intercept;
+        
+        // Check if the ray is exactly vertical
+        if (cos(r_ang) == 0)
+            vert_dist = INFINITY;
+        else
+        {
+            // Loop to find the wall hit
+            bool hit_wall = false;
+            while (!hit_wall && next_x >= 0 && next_x < map->map_w * SCALE && 
+                   next_y >= 0 && next_y < map->map_h * SCALE)
+            {
+                // Calculate the grid cell to check
+                // If looking left, check one cell left
+                int map_x = floor(next_x / SCALE) - (cos(r_ang) < 0 ? 1 : 0);
+                int map_y = floor(next_y / SCALE);
+                
+                // Check if the cell is a wall
+                if (map_x >= 0 && map_x < map->map_w && map_y >= 0 && map_y < map->map_h && 
+                    map->map[map_y][map_x] == '1')
+                {
+                    hit_wall = true;
+                    vert_inter.x = next_x;
+                    vert_inter.y = next_y;
+                    vert_dist = sqrt(pow(vert_inter.x - p_x, 2) + pow(vert_inter.y - p_y, 2));
+                }
+                else
+                {
+                    // If no wall, move to next intersection
+                    next_x += x_step;
+                    next_y += y_step;
+                }
+            }
+        }
+    }
+    
+    // Return the closest intersection
+    if (horz_dist < vert_dist)
+    {
+        intersection = horz_inter;
+    }
+    else
+    {
+        intersection = vert_inter;
+    }
+    
+    return intersection;
+}
+
+int abs(int n) { return ((n > 0) ? n : (n * (-1))); }
+void DDA(t_pos p_pos, t_pos inter_pos, t_map *map)
+{
+    // calculate dx & dy
+    int dx = inter_pos.x - p_pos.x;
+    int dy = inter_pos.y - p_pos.y;
+ 
+    // calculate steps required for generating pixels
+    int steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+ 
+    // calculate increment in x & y for each steps
+    float Xinc = dx / (float)steps;
+    float Yinc = dy / (float)steps;
+ 
+    // Put pixel for each step
+    float X = p_pos.x;
+    float Y = p_pos.y;
+    for (int i = 0; i <= steps; i++) {
+        my_mlx_pixel_put(&map->img, round(X), round(Y),0x00FF00FF); // put pixel at (X,Y)
+        X += Xinc; // increment in x at each step
+        Y += Yinc; // increment in y at each step
     }
 }
 
@@ -162,19 +336,18 @@ void game_loop(void *param)
     
     // Clear the screen
     for (int i = 0; i < W_WIDTH * W_HEIGHT; i++)
-        mlx_put_pixel(map->img.img, i % W_WIDTH, i / W_WIDTH, 0x000000FF);
+        mlx_put_pixel(map->img.img, i % W_WIDTH, i / W_WIDTH, 0x0FFFFF0F);
     
     // Move player
     move_player(map, delta_time);
     
     // Draw map
     draw_map(map);
-    
+    DDA(map->p_pos, get_best_intersection(map, map->p_pos.ang), map);
+
     // Draw player
     draw_player(map);
 }
-
-
 
 
 
@@ -185,15 +358,15 @@ int main(void)
 {
     t_map map;
     char *predefined_map[] = {
-        "111111111111",
-        "100000000001",
-        "100000000001",
-        "100000000001",
-        "100000001001",
-        "100000001001",
-        "100000000001",
-        "100000000001",
-        "111111111111"
+        "1111111111111",
+        "1000000000001",
+        "1000000000001",
+        "1000000000001",
+        "1000001000001",
+        "1000000000001",
+        "1000000000001",
+        "1000000000001",
+        "1111111111111"
     };
 
     map.mlx = mlx_init(W_WIDTH, W_HEIGHT, "Cub3D", false);
@@ -217,12 +390,12 @@ int main(void)
     }
 
     map.map_h = 9;
-    map.map_w = 12;
+    map.map_w = 13;
     map.map = predefined_map;
     
     // Initialize player position (middle of the map)
-    map.p_pos.x = (map.map_w / 2) * SCALE;
-    map.p_pos.y = (map.map_h / 2) * SCALE;
+    map.p_pos.x = (map.map_w / 2) * SCALE + SCALE / 2;
+    map.p_pos.y = (map.map_h / 2) * SCALE - SCALE / 2;
     map.p_pos.ang = 0;  // Initial angle (facing right)
     map.p_pos.walk_direction = 0;
     map.p_pos.rotate_direction = 0;
