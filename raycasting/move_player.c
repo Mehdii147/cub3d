@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:09:28 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/03/14 02:10:15 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/03/14 02:32:46 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ void draw_player(t_map *map)
     
     // Draw direction line
     int line_length = 20;
-    int end_x = player_x + cos(map->p_pos.ang) * line_length;
-    int end_y = player_y + sin(map->p_pos.ang) * line_length;
+    // int end_x = player_x + cos(map->p_pos.ang) * line_length;
+    // int end_y = player_y + sin(map->p_pos.ang) * line_length;
     
     // Draw a line from player to direction
     for (int t = 0; t < line_length; t++)
