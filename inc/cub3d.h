@@ -57,7 +57,20 @@ typedef struct s_map
 } t_map;
 
 
-
+void game_loop(void *param);
+void key_hook(mlx_key_data_t keydata, void *param);
+void draw_image(void *param);
+void draw_player(t_map *map);
+void move_player(t_map *map, float delta_time);
+void draw_map(t_map *map);
+void draw_wall(t_map *map, int offset_x, int offset_y);
+bool map_has_wall_at(t_map *map, double x, double y);
+void my_mlx_pixel_put(t_data *data, int x, int y, uint32_t color);
+void DDA(t_pos p_pos, t_pos inter_pos, t_map *map);
+t_pos get_best_intersection(t_map *map, double r_ang);
+float find_horizontal_intersection(t_map *map, double r_ang, float p_x, float p_y, t_pos *horz_inter);
+float find_vertical_intersection(t_map *map, double r_ang, float p_x, float p_y, t_pos *vert_inter);
+int abs(int n);
 
 
 #endif
