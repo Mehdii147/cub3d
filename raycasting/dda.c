@@ -1,17 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   dda.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 03:20:01 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/03/14 02:24:26 by ehafiane         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-
-#include "../inc/cub3d.h"
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -208,6 +194,7 @@ void DDA(t_pos p_pos, t_pos inter_pos, t_map *map)
 }
 
 
+
 void game_loop(void *param)
 {
     t_map *map = (t_map *)param;
@@ -216,17 +203,86 @@ void game_loop(void *param)
     double delta_time = current_time - last_time;
     last_time = current_time;
     
-    // clear screen
+    // Clear screen
     for (int i = 0; i < W_WIDTH * W_HEIGHT; i++)
         mlx_put_pixel(map->img.img, i % W_WIDTH, i / W_WIDTH, 0x0FFFFF0F);
     
-    // move player
+    // Move player
     move_player(map, delta_time);
     
-    // draw map
+    // Draw map
     draw_map(map);
-    DDA(map->p_pos, get_best_intersection(map, map->p_pos.ang), map);
-
-    // draw player
+    
+    // Define FOV and number of rays
+    double fov = 60 * (M_PI / 180); // Convert FOV to radians
+    int num_rays = W_WIDTH; // Number of rays to cast (one per pixel column)
+    double angle_increment = fov / num_rays;
+    
+    // Cast rays within the FOV
+    for (int i = 0; i < num_rays; i++)
+    {
+        double ray_angle = map->p_pos.ang - (fov / 2) + (i * angle_increment);
+        t_pos intersection = get_best_intersection(map, ray_angle);
+        DDA(map->p_pos, intersection, map);
+    }
+    
+    // Draw player
     draw_player(map);
 }
+
+
+
+
+
+// void game_loop(void *param)
+// {
+//     t_map *map = (t_map *)param;
+//     static double last_time = 0;
+//     double current_time = mlx_get_time();
+//     double delta_time = current_time - last_time;
+//     last_time = current_time;
+    
+//     // Clear screen
+//     for (int i = 0; i < W_WIDTH * W_HEIGHT; i++)
+//         mlx_put_pixel(map->img.img, i % W_WIDTH, i / W_WIDTH, 0x0FFFFF0F);
+    
+//     // Move player
+//     move_player(map, delta_time);
+    
+//     // Draw map (2D minimap)
+//     // draw_map(map);
+    
+//     // Define FOV and number of rays
+//     double fov = 60 * (M_PI / 180); // Convert FOV to radians
+//     int num_rays = W_WIDTH; // Number of rays to cast (one per pixel column)
+//     double angle_increment = fov / num_rays;
+    
+//     // Cast rays within the FOV
+//     for (int i = 0; i < num_rays; i++)
+//     {
+//         double ray_angle = map->p_pos.ang - (fov / 2) + (i * angle_increment);
+//         t_pos intersection = get_best_intersection(map, ray_angle);
+        
+//         // Calculate distance to the wall (corrected for fisheye effect)
+//         double distance = sqrt(pow(intersection.x - map->p_pos.x, 2) + pow(intersection.y - map->p_pos.y, 2));
+//         distance *= cos(ray_angle - map->p_pos.ang); // Fisheye correction
+        
+//         // Calculate wall height
+//         double wall_height = (SCALE / distance) * (W_WIDTH / 2) / tan(fov / 2);
+        
+//         // Calculate the top and bottom of the wall on the screen
+//         int wall_top = (W_HEIGHT / 2) - (wall_height / 2);
+//         int wall_bottom = (W_HEIGHT / 2) + (wall_height / 2);
+        
+//         // Draw the wall column
+//         for (int y = wall_top; y < wall_bottom; y++)
+//         {
+//             // Set the color of the wall (e.g., red for now)
+//             uint32_t color = 0xD3D3D3FF; // Light grey color (RGBA)
+//             my_mlx_pixel_put(&map->img, i, y, color);
+//         }
+//     }
+    
+//     // Draw player (2D minimap)
+//     // draw_player(map);
+// }
