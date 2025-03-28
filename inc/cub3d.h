@@ -39,6 +39,13 @@ typedef struct s_data {
     mlx_image_t    *img;
 }    t_data;
 
+typedef struct s_texture {
+    mlx_texture_t *north;
+    mlx_texture_t *south;
+    mlx_texture_t *east;
+    mlx_texture_t *west;
+} t_texture;
+
 typedef struct s_map
 {
 	int map_h;
