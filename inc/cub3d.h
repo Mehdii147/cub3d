@@ -18,7 +18,7 @@
 # define FOV 60
 # define SPEED 100
 # define ROTATE 4
-# define W_WIDTH 1200
+# define W_WIDTH 900
 # define W_HEIGHT 900
 
 typedef struct s_vars {
@@ -55,6 +55,7 @@ typedef struct s_map
     char       *s_textures;
     char       *e_textures;
     char       *w_textures;
+    t_texture textures;
     int         f_col;
     int         c_col;
     char      **map;

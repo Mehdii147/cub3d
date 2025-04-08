@@ -169,29 +169,29 @@ t_pos get_best_intersection(t_map *map, double r_ang)
 }
 
 
-int abs(int n) { return ((n > 0) ? n : (n * (-1))); }
-void DDA(t_pos p_pos, t_pos inter_pos, t_map *map)
-{
-    // 7seb dx o dy
-    int dx = inter_pos.x - p_pos.x;
-    int dy = inter_pos.y - p_pos.y;
+// int abs(int n) { return ((n > 0) ? n : (n * (-1))); }
+// void DDA(t_pos p_pos, t_pos inter_pos, t_map *map)
+// {
+//     // 7seb dx o dy
+//     int dx = inter_pos.x - p_pos.x;
+//     int dy = inter_pos.y - p_pos.y;
  
-    // 7seb steps li khassna bch n7to pixels
-    int steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+//     // 7seb steps li khassna bch n7to pixels
+//     int steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
  
-    // 7seb increment f x o y lkol step
-    float Xinc = dx / (float)steps;
-    float Yinc = dy / (float)steps;
+//     // 7seb increment f x o y lkol step
+//     float Xinc = dx / (float)steps;
+//     float Yinc = dy / (float)steps;
  
     
-    float X = p_pos.x;
-    float Y = p_pos.y;
-    for (int i = 0; i <= steps; i++) {
-        my_mlx_pixel_put(&map->img, round(X), round(Y),0x00FF00FF); // 7ot pixel f (X,Y)
-        X += Xinc; 
-        Y += Yinc;
-    }
-}
+//     float X = p_pos.x;
+//     float Y = p_pos.y;
+//     for (int i = 0; i <= steps; i++) {
+//         my_mlx_pixel_put(&map->img, round(X), round(Y),0x00FF00FF); // 7ot pixel f (X,Y)
+//         X += Xinc; 
+//         Y += Yinc;
+//     }
+// }
 
 
 
@@ -232,8 +232,6 @@ void DDA(t_pos p_pos, t_pos inter_pos, t_map *map)
 
 
 
-
-
 void game_loop(void *param)
 {
     t_map *map = (t_map *)param;
@@ -246,14 +244,10 @@ void game_loop(void *param)
     for (int i = 0; i < W_WIDTH * W_HEIGHT; i++)
         mlx_put_pixel(map->img.img, i % W_WIDTH, i / W_WIDTH, 0x0FFFFF0F);
     
-    // Move player
     move_player(map, delta_time);
     
-    // Draw map (2D minimap)
-    // draw_map(map);
-    
     // Define FOV and number of rays
-    double fov = 60 * (M_PI / 180); // Convert FOV to radians
+    double fov = 60 * (M_PI / 180); // Convert to radians
     int num_rays = W_WIDTH; // Number of rays to cast (one per pixel column)
     double angle_increment = fov / num_rays;
     
@@ -261,28 +255,78 @@ void game_loop(void *param)
     for (int i = 0; i < num_rays; i++)
     {
         double ray_angle = map->p_pos.ang - (fov / 2) + (i * angle_increment);
-        t_pos intersection = get_best_intersection(map, ray_angle);
         
-        // Calculate distance to the wall (corrected for fisheye effect)
-        double distance = sqrt(pow(intersection.x - map->p_pos.x, 2) + pow(intersection.y - map->p_pos.y, 2));
-        distance *= cos(ray_angle - map->p_pos.ang); // Fisheye correction
+        // Get intersection points and distances
+        t_pos horz_inter, vert_inter;
+        float horz_dist = find_horizontal_intersection(map, ray_angle, map->p_pos.x, map->p_pos.y, &horz_inter);
+        float vert_dist = find_vertical_intersection(map, ray_angle, map->p_pos.x, map->p_pos.y, &vert_inter);
+        
+        // Determine which wall was hit and the hit position
+        bool is_horz_hit = (horz_dist < vert_dist);
+        t_pos intersection = is_horz_hit ? horz_inter : vert_inter;
+        double distance = is_horz_hit ? horz_dist : vert_dist;
+        
+        // Fisheye correction
+        distance *= cos(ray_angle - map->p_pos.ang);
         
         // Calculate wall height
-        double wall_height = (SCALE / distance) * (W_WIDTH / 2) / tan(fov / 2);
+        double wall_height = (SCALE / distance) * (W_HEIGHT / 2) / tan(fov / 2);
         
         // Calculate the top and bottom of the wall on the screen
-        int wall_top = (W_HEIGHT / 2) - (wall_height / 2);
-        int wall_bottom = (W_HEIGHT / 2) + (wall_height / 2);
+        int wall_top = W_HEIGHT / 2 - (wall_height / 2);
         
-        // Draw the wall column
-        for (int y = wall_top; y < wall_bottom; y++)
-        {
-            // Set the color of the wall (e.g., red for now)
-            uint32_t color = 0xD3D3D3FF; // Light grey color (RGBA)
+        int wall_bottom = W_HEIGHT / 2 + (wall_height / 2);
+        
+        // Determine which texture to use based on the hit wall
+        mlx_texture_t *texture = NULL;
+        
+        if (is_horz_hit) {
+            // Horizontal hit - north or south wall
+            texture = (sin(ray_angle) > 0) ? map->textures.south : map->textures.north;
+        } else {
+            // Vertical hit - east or west wall
+            texture = (cos(ray_angle) > 0) ? map->textures.east : map->textures.west;
+        }
+        
+        // Calculate texture x-coordinate
+        int tex_x;
+        if (is_horz_hit) {
+            // For horizontal intersections, use the x-coordinate
+            tex_x = (int)(intersection.x) % SCALE;
+        } else {
+            // For vertical intersections, use the y-coordinate
+            tex_x = (int)(intersection.y) % SCALE;
+        }
+        
+        // Convert to texture space
+        tex_x = (tex_x * texture->width) / SCALE;
+        int vertical_start = wall_top > 0 ? wall_top : 0;
+        int vertical_end = wall_bottom < W_HEIGHT ? wall_bottom : W_HEIGHT;
+        
+        // Draw the textured wall strip
+        for (int y = vertical_start; y < vertical_end; y++) {
+            // Calculate texture y-coordinate
+            int tex_y = ((y - wall_top) * texture->height) / (wall_bottom - wall_top);
+            
+            // Get color from texture
+            uint8_t *pixel = &texture->pixels[(tex_y * texture->width + tex_x) * 4];
+            uint32_t color = (pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | pixel[3];
+            
             my_mlx_pixel_put(&map->img, i, y, color);
+        }
+        
+        // Draw floor and ceiling
+        for (int y = 0; y < wall_top; y++) {
+            // Ceiling - you can set a color or use a texture
+            my_mlx_pixel_put(&map->img, i, y, 0x87CEEBFF); // Sky blue
+        }
+        
+        for (int y = wall_bottom; y < W_HEIGHT; y++) {
+            // Floor - you can set a color or use a texture
+            my_mlx_pixel_put(&map->img, i, y, 0x8B4513FF); // Brown
         }
     }
     
-    // Draw player (2D minimap)
+    // Draw player for minimap if needed
     // draw_player(map);
 }
