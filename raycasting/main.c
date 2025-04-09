@@ -6,53 +6,11 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:06:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/08 20:29:31 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:01:58 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
-
-bool file_exists(const char *filename) {
-    FILE *file = fopen(filename, "r");
-    if (file) {
-        fclose(file);
-        return true;
-    }
-    return false;
-}
-
-void load_textures(t_map *map)
-{
-    // Load north texture
-    map->textures.north = mlx_load_png(map->n_textures);
-    if (!map->textures.north) {
-        fprintf(stderr, "Failed to load north texture: %s\n", map->n_textures);
-        exit(EXIT_FAILURE);
-    }
-
-    // Load south texture
-    map->textures.south = mlx_load_png(map->s_textures);
-    if (!map->textures.south) {
-        fprintf(stderr, "Failed to load south texture: %s\n", map->s_textures);
-        exit(EXIT_FAILURE);
-    }
-
-    // Load east texture
-    map->textures.east = mlx_load_png(map->e_textures);
-    if (!map->textures.east) {
-        fprintf(stderr, "Failed to load east texture: %s\n", map->e_textures);
-        exit(EXIT_FAILURE);
-    }
-
-    // Load west texture
-    map->textures.west = mlx_load_png(map->w_textures);
-    if (!map->textures.west) {
-        fprintf(stderr, "Failed to load west texture: %s\n", map->w_textures);
-        exit(EXIT_FAILURE);
-    }
-    
-    printf("All textures loaded successfully!\n");
-}
 
 
 int main(void)

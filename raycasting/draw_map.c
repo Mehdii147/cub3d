@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:08:30 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/03/14 02:10:18 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:18:51 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,6 @@ void draw_wall(t_map *map, int offset_x, int offset_y)
     }
 }
 
-void draw_map(t_map *map)
-{
-    for (int i = 0; i < map->map_h; i++)
-    {
-        for (int j = 0; j < map->map_w; j++)
-        {
-            if (map->map[i][j] == '1')
-                draw_wall(map, j * SCALE, i * SCALE);
-        }
-    }
-}
-
-void draw_image(void *param)
-{
-    t_map *map = (t_map *)param;
-    draw_map(map);
-}
 
 bool map_has_wall_at(t_map *map, double x, double y)
 {
@@ -63,4 +46,20 @@ bool map_has_wall_at(t_map *map, double x, double y)
         return true;
     
     return false;
+}
+
+// Draw ceiling
+void draw_ceiling(t_map *map, int column, int wall_top)
+{
+    for (int y = 0; y < wall_top; y++) {
+        my_mlx_pixel_put(&map->img, column, y, 0x87CEEBFF); // Sky blue
+    }
+}
+
+// Draw floor
+void draw_floor(t_map *map, int column, int wall_bottom)
+{
+    for (int y = wall_bottom; y < W_HEIGHT; y++) {
+        my_mlx_pixel_put(&map->img, column, y, 0x8B4513FF); // Brown
+    }
 }
