@@ -3,14 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:06:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/10 14:07:09 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:16:38 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
+
+void init_map(t_map *map, char **predefined_map)
+{
+    map->n_textures = "./textures/wall1F.png";
+    map->s_textures = "./textures/wall2F.png";
+    map->e_textures = "./textures/wall3F.png";
+    map->w_textures = "./textures/wall4F.png";
+    load_textures(map);
+    map->map_h = 14;
+    map->map_w = 18;
+    map->map = predefined_map;
+    map->p_pos.x = (map->map_w / 2) * SCALE + SCALE / 2;
+    map->p_pos.y = (map->map_h / 2) * SCALE - SCALE / 2;
+    map->p_pos.ang = 0;  // Initial angle (facing right)
+    map->p_pos.walk_direction = 0;
+    map->p_pos.rotate_direction = 0;
+}
+
+int initialize_mlx(t_map *map)
+{
+    map->mlx = mlx_init(W_WIDTH, W_HEIGHT, "Cub3D", false);
+    if (!map->mlx)
+    {
+        fprintf(stderr, "Error initializing MLX42\n");
+        return (EXIT_FAILURE);
+    }
+
+    map->img.img = mlx_new_image(map->mlx, W_WIDTH, W_HEIGHT);
+    if (!map->img.img)
+    {
+        fprintf(stderr, "Error creating image\n");
+        return (EXIT_FAILURE);
+    }
+
+    if (mlx_image_to_window(map->mlx, map->img.img, 0, 0) == -1)
+    {
+        fprintf(stderr, "Error putting image to window\n");
+        return (EXIT_FAILURE);
+    }
+    return (EXIT_SUCCESS);
+}
 
 int main(void)
 {
@@ -33,39 +74,10 @@ int main(void)
         "111111111111111111"
     };
 
-    map.mlx = mlx_init(W_WIDTH, W_HEIGHT, "Cub3D", false);
-    if (!map.mlx)
-    {
-        fprintf(stderr, "Error initializing MLX42\n");
-        return (EXIT_FAILURE);
-    }
+    initialize_mlx(&map);
 
-    map.img.img = mlx_new_image(map.mlx, W_WIDTH, W_HEIGHT);
-    if (!map.img.img)
-    {
-        fprintf(stderr, "Error creating image\n");
-        return (EXIT_FAILURE);
-    }
-
-    if (mlx_image_to_window(map.mlx, map.img.img, 0, 0) == -1)
-    {
-        fprintf(stderr, "Error putting image to window\n");
-        return (EXIT_FAILURE);
-    }
-    map.n_textures = "./textures/wall1F.png";
-    map.s_textures = "./textures/wall2F.png";
-    map.e_textures = "./textures/wall3F.png";
-    map.w_textures = "./textures/wall4F.png";
-    load_textures(&map);
-    map.map_h = 14;
-    map.map_w = 18;
-    map.map = predefined_map;
-    map.p_pos.x = (map.map_w / 2) * SCALE + SCALE / 2;
-    map.p_pos.y = (map.map_h / 2) * SCALE - SCALE / 2;
-    map.p_pos.ang = 0;  // Initial angle (facing right)
-    map.p_pos.walk_direction = 0;
-    map.p_pos.rotate_direction = 0;
-
+    init_map(&map, predefined_map);
+    
     mlx_key_hook(map.mlx, key_hook, &map);
     mlx_loop_hook(map.mlx, game_loop, &map);
     mlx_loop(map.mlx);
