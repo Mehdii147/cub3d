@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:06:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/09 13:01:58 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/10 14:07:09 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
-
 
 int main(void)
 {
@@ -53,10 +52,10 @@ int main(void)
         fprintf(stderr, "Error putting image to window\n");
         return (EXIT_FAILURE);
     }
-    map.n_textures = "/Users/mehdi/1337/cub3dm/textures/wall1F.png";
-    map.s_textures = "/Users/mehdi/1337/cub3dm/textures/wall2F.png";
-    map.e_textures = "/Users/mehdi/1337/cub3dm/textures/wall3F.png";
-    map.w_textures = "/Users/mehdi/1337/cub3dm/textures/wall4F.png";
+    map.n_textures = "./textures/wall1F.png";
+    map.s_textures = "./textures/wall2F.png";
+    map.e_textures = "./textures/wall3F.png";
+    map.w_textures = "./textures/wall4F.png";
     load_textures(&map);
     map.map_h = 14;
     map.map_w = 18;
