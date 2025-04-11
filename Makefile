@@ -6,13 +6,13 @@
 #    By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/14 02:35:02 by ehafiane          #+#    #+#              #
-#    Updated: 2025/04/09 13:25:05 by ehafiane         ###   ########.fr        #
+#    Updated: 2025/04/10 18:20:22 by ehafiane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 CC = cc
-CFLAGS = #-Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror 
 # Add architecture flag to match libraries
 ARCH = -arch x86_64
 mlx =  -I./MLX -I./glfw-3.4.bin.MACOS/include -L./MLX -lmlx42 -L./glfw-3.4.bin.MACOS/lib-x86_64 -lglfw.3 -Wl,-rpath,./glfw-3.4.bin.MACOS/lib-x86_64 -framework Cocoa -framework OpenGL -framework IOKit

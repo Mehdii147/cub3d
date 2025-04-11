@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:17:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/09 13:17:40 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:21:15 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ return vert_dist;
 float find_vertical_intersection(t_map *map, double r_ang, float p_x, float p_y, 
 	   t_pos *vert_inter)
 {
-	float vert_dist = INFINITY;
 	float x_intercept, y_intercept, x_step, y_step;
 
 	if (cos(r_ang) == 0)

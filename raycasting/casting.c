@@ -98,17 +98,12 @@ void game_loop(void *param)
     double delta_time = current_time - last_time;
     last_time = current_time;
     
-    // Clear screen and move player
     clear_screen(map);
     move_player(map, delta_time);
-    
-    // Initialize ray casting variables
     double fov;
     int num_rays;
     double angle_increment;
-    init_ray_casting(map->p_pos.ang, &fov, &num_rays, &angle_increment);
-    
-    // Cast rays within the FOV
+    init_ray_casting(&fov, &num_rays, &angle_increment);
     for (int i = 0; i < num_rays; i++)
     {
         double ray_angle = calculate_ray_angle(map->p_pos.ang, fov, angle_increment, i);

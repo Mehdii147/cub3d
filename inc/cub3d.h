@@ -16,7 +16,7 @@
 
 # define SCALE 64
 # define FOV 60
-# define SPEED 100
+# define SPEED 200
 # define ROTATE 4
 # define W_WIDTH 900
 # define W_HEIGHT 900
@@ -33,6 +33,7 @@ typedef struct s_pos
 	double    ang;
 	int 	  walk_direction;
 	int 	  rotate_direction;
+    int 	  side_direction;
 }    t_pos;
 
 typedef struct s_data {
@@ -85,7 +86,7 @@ void calculate_vertical_steps(double r_ang, float *x_step, float *y_step);
 bool check_vertical_wall(t_map *map, float next_x, float next_y, double r_ang);
 float continue_vertical_intersection(t_map *map, double r_ang, float p_x, float p_y, t_pos *vert_inter, float next_x, float next_y, float x_step, float y_step);
 float find_vertical_intersection(t_map *map, double r_ang, float p_x, float p_y,  t_pos *vert_inter);
-void init_ray_casting(double player_angle, double *fov, int *num_rays, double *angle_increment);
+void init_ray_casting(double *fov, int *num_rays, double *angle_increment);
 void clear_screen(t_map *map);
 double calculate_ray_angle(double player_angle, double fov, double angle_increment, int column);
 void get_wall_hit_info(float horz_dist, float vert_dist, t_pos horz_inter, t_pos vert_inter, bool *is_horz_hit, t_pos *intersection,  double *distance);

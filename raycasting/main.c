@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:06:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/10 18:16:38 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:46:28 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ void init_map(t_map *map, char **predefined_map)
     map->map = predefined_map;
     map->p_pos.x = (map->map_w / 2) * SCALE + SCALE / 2;
     map->p_pos.y = (map->map_h / 2) * SCALE - SCALE / 2;
-    map->p_pos.ang = 0;  // Initial angle (facing right)
+    map->p_pos.ang = 0;  //facing right
     map->p_pos.walk_direction = 0;
+    map->p_pos.side_direction = 0;
     map->p_pos.rotate_direction = 0;
 }
 
@@ -73,9 +74,8 @@ int main(void)
         "100000000000000001",
         "111111111111111111"
     };
-
     initialize_mlx(&map);
-
+    
     init_map(&map, predefined_map);
     
     mlx_key_hook(map.mlx, key_hook, &map);
@@ -85,7 +85,6 @@ int main(void)
     mlx_delete_texture(map.textures.south);
     mlx_delete_texture(map.textures.east);
     mlx_delete_texture(map.textures.west);
-    
     mlx_terminate(map.mlx);
     return (EXIT_SUCCESS);
 }

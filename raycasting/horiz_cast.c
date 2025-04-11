@@ -6,13 +6,12 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:16:50 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/09 13:16:55 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:40:56 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
 
-// Calculate initial intercept points for horizontal ray
 void init_horizontal_intercept(double r_ang, float p_x, float p_y, 
 	float *y_intercept, float *x_intercept)
 {
@@ -23,7 +22,6 @@ void init_horizontal_intercept(double r_ang, float p_x, float p_y,
 	*x_intercept = p_x + (*y_intercept - p_y) / tan(r_ang);
 }
 
-// Calculate step sizes for horizontal ray casting
 void calculate_horizontal_steps(double r_ang, float *y_step, float *x_step)
 {
 	*y_step = SCALE;
@@ -35,7 +33,6 @@ void calculate_horizontal_steps(double r_ang, float *y_step, float *x_step)
 		*x_step *= -1;
 	}
 
-	// Check for wall collision in horizontal ray casting
 bool check_horizontal_wall(t_map *map, float next_x, float next_y, double r_ang)
 {
 	int map_x = floor(next_x / SCALE);
@@ -75,11 +72,9 @@ float continue_horizontal_intersection(t_map *map, double r_ang, float p_x, floa
 	return horz_dist;
 }
 
-	// Find horizontal wall intersection
 float find_horizontal_intersection(t_map *map, double r_ang, float p_x, float p_y, 
 		t_pos *horz_inter)
 {
-	float horz_dist = INFINITY;
 	float y_intercept, x_intercept, y_step, x_step;
 
 	if (sin(r_ang) == 0)
