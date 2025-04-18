@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:15:57 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/10 18:47:17 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:35:22 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 // Initialize ray casting variables
 void init_ray_casting(double *fov, int *num_rays, double *angle_increment)
 {
-    *fov = 60 * (M_PI / 180); // Convert to radians
-    *num_rays = W_WIDTH; // Number of rays to cast (one per pixel column)
+    *fov = 60 * (M_PI / 180);
+    *num_rays = W_WIDTH;
     *angle_increment = *fov / *num_rays;
 }
 

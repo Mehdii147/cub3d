@@ -79,11 +79,9 @@ void process_ray(t_map *map, int column, double ray_angle)
     calculate_wall_dimensions(distance, ray_angle, map->p_pos.ang, 
                            fov, &wall_top, &wall_bottom);
     
-    // Select and apply texture
     mlx_texture_t *texture = select_texture(map, is_horz_hit, ray_angle);
     int tex_x = calculate_texture_x(is_horz_hit, intersection, texture);
     
-    // Draw wall, floor and ceiling
     draw_wall_strip(map, column, wall_top, wall_bottom, texture, tex_x);
     draw_ceiling(map, column, wall_top);
     draw_floor(map, column, wall_bottom);
@@ -92,6 +90,9 @@ void process_ray(t_map *map, int column, double ray_angle)
 // Main game loop function
 void game_loop(void *param)
 {
+    double fov;
+    int num_rays;
+    double angle_increment;
     t_map *map = (t_map *)param;
     static double last_time = 0;
     double current_time = mlx_get_time();
@@ -100,9 +101,6 @@ void game_loop(void *param)
     
     clear_screen(map);
     move_player(map, delta_time);
-    double fov;
-    int num_rays;
-    double angle_increment;
     init_ray_casting(&fov, &num_rays, &angle_increment);
     for (int i = 0; i < num_rays; i++)
     {

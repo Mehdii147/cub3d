@@ -59,5 +59,6 @@
   "files.associations": {
     "cmath": "c",
     "complex": "c"
-  }
+  },
+  "C_Cpp.errorSquiggles": "disabled"
 }
