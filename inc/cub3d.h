@@ -1,8 +1,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../libft/libft.h"
-# include "../gl/get_next_line.h"
+
 # include "../MLX/MLX42.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -12,7 +11,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <math.h>
-
+# include "../parsing/cub.h"
 
 # define SCALE 64
 # define FOV 60
@@ -36,9 +35,9 @@ typedef struct s_pos
     int 	  side_direction;
 }    t_pos;
 
-typedef struct s_data {
+typedef struct s_img {
     mlx_image_t    *img;
-}    t_data;
+}    t_img;
 
 typedef struct s_texture {
     mlx_texture_t *north;
@@ -51,7 +50,6 @@ typedef struct s_map
 {
 	int map_h;
 	int map_w;
-    int         checker;
     char       *n_textures;
     char       *s_textures;
     char       *e_textures;
@@ -62,7 +60,8 @@ typedef struct s_map
     char      **map;
     t_pos       p_pos;
     mlx_t      *mlx;
-    t_data      img;
+    t_img      img;
+    t_data   *data;
 } t_map;
 
 
@@ -71,7 +70,7 @@ void key_hook(mlx_key_data_t keydata, void *param);
 void move_player(t_map *map, float delta_time);
 void draw_wall(t_map *map, int offset_x, int offset_y);
 bool map_has_wall_at(t_map *map, double x, double y);
-void my_mlx_pixel_put(t_data *data, int x, int y, uint32_t color);
+void my_mlx_pixel_put(t_img *data, int x, int y, uint32_t color);
 t_pos get_best_intersection(t_map *map, double r_ang);
 void load_textures(t_map *map);
 void draw_ceiling(t_map *map, int column, int wall_top);
@@ -94,6 +93,6 @@ void calculate_wall_dimensions(double distance, double ray_angle, double player_
 mlx_texture_t *select_texture(t_map *map, bool is_horz_hit, double ray_angle);
 int calculate_texture_x(bool is_horz_hit, t_pos intersection, mlx_texture_t *texture);
 void draw_wall_strip(t_map *map, int column, int wall_top, int wall_bottom, mlx_texture_t *texture, int tex_x);
-
+double normalize_angle(double r_ang);
 
 #endif

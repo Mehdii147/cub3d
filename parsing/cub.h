@@ -12,7 +12,7 @@
 # define TILE_SIZE 50
 # define SCREEN_WIDTH 1080
 # define SCREEN_HEIGHT 609
-# define SPEED 4
+// # define SPEED 4
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10

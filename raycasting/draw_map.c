@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:08:30 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/10 18:40:37 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/19 18:45:23 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
 
-void my_mlx_pixel_put(t_data *data, int x, int y, uint32_t color)
+void my_mlx_pixel_put(t_img *img, int x, int y, uint32_t color)
 {
     if (x >= 0 && x < W_WIDTH && y >= 0 && y < W_HEIGHT)
-        mlx_put_pixel(data->img, x, y, color);
+        mlx_put_pixel(img->img, x, y, color);
 }
 
 void draw_wall(t_map *map, int offset_x, int offset_y)
