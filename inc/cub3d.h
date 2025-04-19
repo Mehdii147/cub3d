@@ -55,8 +55,6 @@ typedef struct s_map
     char       *e_textures;
     char       *w_textures;
     t_texture textures;
-    int         f_col;
-    int         c_col;
     char      **map;
     t_pos       p_pos;
     mlx_t      *mlx;

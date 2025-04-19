@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mohilloc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amandour <amandour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:10:49 by amandour          #+#    #+#             */
-/*   Updated: 2025/04/07 18:24:39 by amandour         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:26:30 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ t_heap	*heap_new(void *content)
 t_cube	*get_cub(t_cube *cub)
 {
 	static t_cube	*cub_s;
-
+	
+	cub_s = (t_cube *)malloc(sizeof(t_cube));
+	cub_s->heap = NULL;
 	if (cub)
 		cub_s = cub;
 	return (cub_s);

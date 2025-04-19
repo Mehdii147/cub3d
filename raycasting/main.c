@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:06:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/19 19:26:17 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:43:27 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,7 @@
 void init_map(t_map *map, t_data *data)
 {
     map->data = data;
-    map->n_textures = data->no;
-    map->s_textures = data->so;
-    map->e_textures = data->we;
-    map->w_textures = data->ea;
     load_textures(map);
-
     map->map_h = map->data->height;
     map->map_w = map->data->width;
     map->map = data->map;
