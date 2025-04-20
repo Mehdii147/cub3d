@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   vert_cast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:17:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/10 18:21:15 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/20 17:16:30 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
 
 // Calculate initial intercept points for vertical ray
-void init_vertical_intercept(double r_ang, float p_x, float p_y, 
+void	init_vertical_intercept(double r_ang, float p_x, float p_y,
 	float *x_intercept, float *y_intercept)
 {
 	*x_intercept = floor(p_x / SCALE) * SCALE;
 	if (cos(r_ang) > 0)
 	*x_intercept += SCALE;
-
 	*y_intercept = p_y + (*x_intercept - p_x) * tan(r_ang);
 }
 

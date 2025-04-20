@@ -3,43 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   rendering.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:15:57 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/15 16:35:22 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/20 17:48:14 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
 
-
-// Initialize ray casting variables
-void init_ray_casting(double *fov, int *num_rays, double *angle_increment)
+void	init_ray_casting(double *fov, int *num_rays, double *angle_increment)
 {
-    *fov = 60 * (M_PI / 180);
-    *num_rays = W_WIDTH;
-    *angle_increment = *fov / *num_rays;
+	*fov = 60 * (M_PI / 180);
+	*num_rays = W_WIDTH;
+	*angle_increment = *fov / *num_rays;
 }
 
-// Clear the screen
-void clear_screen(t_map *map)
+void	clear_screen(t_map *map)
 {
-    for (int i = 0; i < W_WIDTH * W_HEIGHT; i++)
-        mlx_put_pixel(map->img.img, i % W_WIDTH, i / W_WIDTH, 0x0FFFFF0F); 
+	int	i;
+
+	i = 0;
+	while (i < W_WIDTH * W_HEIGHT)
+	{
+		mlx_put_pixel(map->img.img, i % W_WIDTH, i / W_WIDTH, 0x0FFFFF0F);
+		i++;
+	}
 }
 
-// Calculate ray angle for current column
-double calculate_ray_angle(double player_angle, double fov, double angle_increment, int column)
+double	calculate_ray_angle(double player_angle, double fov,
+		double angle_increment, int column)
 {
-    return player_angle - (fov / 2) + (column * angle_increment);
+	return (player_angle - (fov / 2) + (column * angle_increment));
 }
 
-// Determine which wall was hit and get hit position
-void get_wall_hit_info(float horz_dist, float vert_dist, t_pos horz_inter, 
-                     t_pos vert_inter, bool *is_horz_hit, t_pos *intersection, 
-                     double *distance)
+void	get_wall_hit_info(float horz_dist, float vert_dist, t_pos horz_inter, 
+					 t_pos vert_inter, bool *is_horz_hit, t_pos *intersection, 
+					 double *distance)
 {
-    *is_horz_hit = (horz_dist < vert_dist);
-    *intersection = *is_horz_hit ? horz_inter : vert_inter;
-    *distance = *is_horz_hit ? horz_dist : vert_dist;
+	*is_horz_hit = (horz_dist < vert_dist);
+	*intersection = *is_horz_hit ? horz_inter : vert_inter;
+	*distance = *is_horz_hit ? horz_dist : vert_dist;
 }

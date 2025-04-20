@@ -6,7 +6,7 @@
 #    By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/14 02:35:02 by ehafiane          #+#    #+#              #
-#    Updated: 2025/04/19 19:04:47 by ehafiane         ###   ########.fr        #
+#    Updated: 2025/04/20 17:41:14 by ehafiane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,10 +39,11 @@ OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(ARCH) $(OBJ) $(mlx) -o $(NAME)
+	@$(CC) $(CFLAGS) $(ARCH) $(OBJ) $(mlx) -o $(NAME)
+	@echo "Compiled successfully"
 
 $(OBJDIR)/%.o: %.c inc/cub3d.h | $(OBJDIR)
-	$(CC) $(CFLAGS) $(ARCH) -c $< -o $@
+	@$(CC) $(CFLAGS) $(ARCH) -c $< -o $@
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
@@ -50,9 +51,11 @@ $(OBJDIR):
 	@mkdir -p $(OBJDIR)/parsing
 
 clean:
-	rm -rf $(OBJ) $(OBJDIR)
+	@rm -rf $(OBJ) $(OBJDIR)
+	@echo "Cleaned up object files"
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
+	@echo "Cleaned up everything"
 
 re: fclean all

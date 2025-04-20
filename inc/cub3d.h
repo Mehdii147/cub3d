@@ -54,6 +54,8 @@ typedef struct s_map
     char       *s_textures;
     char       *e_textures;
     char       *w_textures;
+    float      horz_dist;
+    float      vert_dist;
     t_texture textures;
     char      **map;
     t_pos       p_pos;
@@ -66,7 +68,6 @@ typedef struct s_map
 void game_loop(void *param);
 void key_hook(mlx_key_data_t keydata, void *param);
 void move_player(t_map *map, float delta_time);
-void draw_wall(t_map *map, int offset_x, int offset_y);
 bool map_has_wall_at(t_map *map, double x, double y);
 void my_mlx_pixel_put(t_img *data, int x, int y, uint32_t color);
 t_pos get_best_intersection(t_map *map, double r_ang);
