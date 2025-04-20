@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:15:57 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 17:48:14 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:28:10 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,14 @@ void	get_wall_hit_info(float horz_dist, float vert_dist, t_pos horz_inter,
 					 double *distance)
 {
 	*is_horz_hit = (horz_dist < vert_dist);
-	*intersection = *is_horz_hit ? horz_inter : vert_inter;
-	*distance = *is_horz_hit ? horz_dist : vert_dist;
+	if (*is_horz_hit)
+	{
+		*intersection = horz_inter;
+		*distance = horz_dist;
+	}
+	else
+	{
+		*intersection = vert_inter;
+		*distance = vert_dist;
+	}
 }

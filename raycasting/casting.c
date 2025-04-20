@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 03:20:01 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 18:09:16 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:19:16 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,9 @@ t_pos	get_best_intersection(t_map *map, double r_ang)
 	t_pos	vert_inter;
 
 	r_ang = normalize_angle(r_ang);
-	map->horz_dist = find_horizontal_intersection(map, r_ang, map->p_pos.x,
-			map->p_pos.y, &horz_inter);
-	map->vert_dist = find_vertical_intersection(map, r_ang, map->p_pos.x,
-			map->p_pos.y, &vert_inter);
-	if (map->horz_dist < map->vert_dist)
+	map->p_pos.horz_dist = find_horizontal_intersection(map, r_ang, &horz_inter);
+	map->p_pos.vert_dist = find_vertical_intersection(map, r_ang, &vert_inter);
+	if (map->p_pos.horz_dist < map->p_pos.vert_dist)
 		intersection = horz_inter;
 	else
 		intersection = vert_inter;
@@ -52,9 +50,9 @@ void	process_ray(t_map *map, int column, double ray_angle)
 	int tex_x;
 	double fov = 60 * (M_PI / 180);
 	
-	map->horz_dist = find_horizontal_intersection(map, ray_angle, map->p_pos.x, map->p_pos.y, &horz_inter);
-	map->vert_dist = find_vertical_intersection(map, ray_angle, map->p_pos.x, map->p_pos.y, &vert_inter);
-	get_wall_hit_info(map->horz_dist, map->vert_dist, horz_inter, vert_inter, &is_horz_hit, &intersection, &distance);
+	map->p_pos.horz_dist = find_horizontal_intersection(map, ray_angle, &horz_inter);
+	map->p_pos.vert_dist = find_vertical_intersection(map, ray_angle, &vert_inter);
+	get_wall_hit_info(map->p_pos.horz_dist, map->p_pos.vert_dist, horz_inter, vert_inter, &is_horz_hit, &intersection, &distance);
 	calculate_wall_dimensions(distance, ray_angle, map->p_pos.ang, fov, &wall_top, &wall_bottom);
 	texture = select_texture(map, is_horz_hit, ray_angle);
 	tex_x = calculate_texture_x(is_horz_hit, intersection, texture);

@@ -3,90 +3,88 @@
 /*                                                        :::      ::::::::   */
 /*   horiz_cast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:16:50 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/10 18:40:56 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:23:59 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
 
-void init_horizontal_intercept(double r_ang, float p_x, float p_y, 
-	float *y_intercept, float *x_intercept)
+void	init_horizontal_intercept(double r_ang, t_map *map)
 {
-	*y_intercept = floor(p_y / SCALE) * SCALE;
+	map->p_pos.y_intercept = floor(map->p_pos.y / SCALE) * SCALE;
 	if (sin(r_ang) > 0)
-	*y_intercept += SCALE;
-
-	*x_intercept = p_x + (*y_intercept - p_y) / tan(r_ang);
+		map->p_pos.y_intercept += SCALE;
+	map->p_pos.x_intercept = map->p_pos.x
+		+ (map->p_pos.y_intercept - map->p_pos.y) / tan(r_ang);
 }
 
-void calculate_horizontal_steps(double r_ang, float *y_step, float *x_step)
+void	calculate_horizontal_steps(double r_ang, t_map *map)
 {
-	*y_step = SCALE;
+	map->p_pos.y_step = SCALE;
 	if (sin(r_ang) < 0)
-	*y_step *= -1;
-
-	*x_step = SCALE / tan(r_ang);
-	if ((cos(r_ang) < 0 && *x_step > 0) || (cos(r_ang) > 0 && *x_step < 0))
-		*x_step *= -1;
-	}
-
-bool check_horizontal_wall(t_map *map, float next_x, float next_y, double r_ang)
-{
-	int map_x = floor(next_x / SCALE);
-	int map_y = floor(next_y / SCALE) - (sin(r_ang) < 0 ? 1 : 0);
-
-	if (map_x >= 0 && map_x < map->map_w && map_y >= 0 && 
-	map_y < map->map_h && map->map[map_y][map_x] == '1')
-	return true;
-
-	return false;
+		map->p_pos.y_step *= -1;
+	map->p_pos.x_step = SCALE / tan(r_ang);
+	if ((cos(r_ang) < 0 && map->p_pos.x_step > 0)
+		|| (cos(r_ang) > 0 && map->p_pos.x_step < 0))
+		map->p_pos.x_step *= -1;
 }
 
-float continue_horizontal_intersection(t_map *map, double r_ang, float p_x, float p_y,
-	t_pos *horz_inter, float next_x, float next_y,
-	float x_step, float y_step)
+bool	check_horizontal_wall(t_map *map, float next_x,
+		float next_y, double r_ang)
 {
-	bool hit_wall = false;
-	float horz_dist = INFINITY;
+	int	map_x ;
+	int	map_y ;
 
-	while (!hit_wall && next_x >= 0 && next_x < map->map_w * SCALE && 
-	next_y >= 0 && next_y < map->map_h * SCALE)
+	map_x = floor(next_x / SCALE);
+	map_y = floor(next_y / SCALE);
+	if (sin(r_ang) < 0)
+		map_y -= 1;
+	if (map_x >= 0 && map_x < map->map_w && map_y >= 0
+		&& map_y < map->map_h && map->map[map_y][map_x] == '1')
+		return (true);
+	return (false);
+}
+
+float	continue_horizontal_intersection(t_map *map, double r_ang,
+		t_pos *horz_inter)
+{
+	bool	hit_wall;
+	float	horz_dist;
+
+	hit_wall = false;
+	horz_dist = INFINITY;
+	while (!hit_wall && map->p_pos.x_intercept >= 0
+		&& map->p_pos.x_intercept < map->map_w * SCALE
+		&& map->p_pos.y_intercept >= 0
+		&& map->p_pos.y_intercept < map->map_h * SCALE)
 	{
-		if (check_horizontal_wall(map, next_x, next_y, r_ang))
+		if (check_horizontal_wall(map, map->p_pos.x_intercept,
+				map->p_pos.y_intercept, r_ang))
 		{
 			hit_wall = true;
-			horz_inter->x = next_x;
-			horz_inter->y = next_y;
-			horz_dist = sqrt(pow(horz_inter->x - p_x, 2) + 
-			pow(horz_inter->y - p_y, 2));
+			horz_inter->x = map->p_pos.x_intercept;
+			horz_inter->y = map->p_pos.y_intercept;
+			horz_dist = sqrt(pow(horz_inter->x - map->p_pos.x, 2)
+					+ pow(horz_inter->y - map->p_pos.y, 2));
 		}
 		else
 		{
-			next_x += x_step;
-			next_y += y_step;
+			map->p_pos.x_intercept += map->p_pos.x_step;
+			map->p_pos.y_intercept += map->p_pos.y_step;
 		}
 	}
-	return horz_dist;
+	return (horz_dist);
 }
 
-float find_horizontal_intersection(t_map *map, double r_ang, float p_x, float p_y, 
+float	find_horizontal_intersection(t_map *map, double r_ang,
 		t_pos *horz_inter)
 {
-	float y_intercept, x_intercept, y_step, x_step;
-
 	if (sin(r_ang) == 0)
-	return INFINITY;
-
-	init_horizontal_intercept(r_ang, p_x, p_y, &y_intercept, &x_intercept);
-	calculate_horizontal_steps(r_ang, &y_step, &x_step);
-
-	float next_x = x_intercept;
-	float next_y = y_intercept;
-
-	return continue_horizontal_intersection(map, r_ang, p_x, p_y, 
-					horz_inter, next_x, next_y, 
-					x_step, y_step);
+		return (INFINITY);
+	init_horizontal_intercept(r_ang, map);
+	calculate_horizontal_steps(r_ang, map);
+	return (continue_horizontal_intersection(map, r_ang, horz_inter));
 }
