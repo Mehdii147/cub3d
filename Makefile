@@ -6,7 +6,7 @@
 #    By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/14 02:35:02 by ehafiane          #+#    #+#              #
-#    Updated: 2025/04/20 17:41:14 by ehafiane         ###   ########.fr        #
+#    Updated: 2025/04/21 15:54:14 by ehafiane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,6 @@ SRC = raycasting/main.c raycasting/casting.c raycasting/move_player.c raycasting
 	parsing/parsing_map3.c \
 	parsing/parsing_helpe3.c \
 	parsing/mohilloc.c \
-	parsing/cub3D.c
 
 raycasting = raycasting
 OBJDIR = obj
