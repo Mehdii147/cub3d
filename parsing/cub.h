@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/21 14:32:09 by ehafiane          #+#    #+#             */
+/*   Updated: 2025/04/21 14:32:32 by ehafiane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef CUB_H
 # define CUB_H
@@ -12,7 +23,6 @@
 # define TILE_SIZE 50
 # define SCREEN_WIDTH 1080
 # define SCREEN_HEIGHT 609
-// # define SPEED 4
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
@@ -86,7 +96,7 @@ void			check_map_round_byones(t_data *args);
 void			ivalid_lelement(char *str);
 void			rep_spaseses_to_ones(t_data *args);
 
-t_cube	*get_cub(t_cube *cub);
+t_cube			*get_cub(t_cube *cub);
 t_data			*ft_parsing(char **av);
 
 /*-----------garbege collecter---------------*/

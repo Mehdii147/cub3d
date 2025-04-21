@@ -6,7 +6,7 @@
 #    By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/11 11:14:45 by amandour          #+#    #+#              #
-#    Updated: 2025/04/19 19:01:25 by ehafiane         ###   ########.fr        #
+#    Updated: 2025/04/21 14:31:56 by ehafiane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,6 @@ SRCS					= get_next_line.c \
 						  parsing_map3.c \
 						  parsing_helpe3.c \
 						  mohilloc.c \
-						  cub3D.c
 
 OBJS					= $(SRCS:.c=.o)
 

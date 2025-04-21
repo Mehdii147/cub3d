@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_map3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amandour <amandour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:59:44 by amandour          #+#    #+#             */
-/*   Updated: 2025/04/11 17:59:44 by amandour         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:32:51 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	check_params(t_data args)
 	if (args.f_c == -1 || args.c_color == -1)
 		ft_error_message("Error:\nMissing color!!");
 }
-//checks that all characters in the map conform to the allowed set of characters that make up the valid map.
+
 static void	check_valid_map(t_data *args)
 {
 	int	i;
@@ -66,7 +66,7 @@ static void	check_valid_map(t_data *args)
 		i++;
 	}
 }
-//verify that the map contains exactly one player 
+
 void	check_elements(t_data *args)
 {
 	int	i;
