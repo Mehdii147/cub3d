@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:08:30 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 18:06:28 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:07:05 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,23 @@ bool	map_has_wall_at(t_map *map, double x, double y)
 	return (false);
 }
 
-void	draw_ceiling(t_map *map, int column, int wall_top)
+void	draw_ceiling(t_map *map, int column)
 {
 	int	y;
 
 	y = 0;
-	while (y < wall_top)
+	while (y < map->p_pos.wall_top)
 	{
 		my_mlx_pixel_put(&map->img, column, y, map->data->c_color);
 		y++;
 	}
 }
 
-void	draw_floor(t_map *map, int column, int wall_bottom)
+void	draw_floor(t_map *map, int column)
 {
 	int	y;
 
-	y = wall_bottom;
+	y = map->p_pos.wall_bottom;
 	while (y < W_HEIGHT)
 	{
 		my_mlx_pixel_put(&map->img, column, y, map->data->f_c);

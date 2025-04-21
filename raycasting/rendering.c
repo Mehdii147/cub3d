@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:15:57 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 23:28:10 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:04:08 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,18 @@ double	calculate_ray_angle(double player_angle, double fov,
 	return (player_angle - (fov / 2) + (column * angle_increment));
 }
 
-void	get_wall_hit_info(float horz_dist, float vert_dist, t_pos horz_inter, 
-					 t_pos vert_inter, bool *is_horz_hit, t_pos *intersection, 
-					 double *distance)
+void	get_wall_hit_info(t_map *map, t_pos horz_inter,
+		t_pos vert_inter, t_pos *intersection)
 {
-	*is_horz_hit = (horz_dist < vert_dist);
-	if (*is_horz_hit)
+	map->p_pos.is_horz_hit = (map->p_pos.horz_dist < map->p_pos.vert_dist);
+	if (map->p_pos.is_horz_hit)
 	{
 		*intersection = horz_inter;
-		*distance = horz_dist;
+		map->p_pos.distance = map->p_pos.horz_dist;
 	}
 	else
 	{
 		*intersection = vert_inter;
-		*distance = vert_dist;
+		map->p_pos.distance = map->p_pos.vert_dist;
 	}
 }

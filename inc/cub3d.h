@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:01:12 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 23:23:41 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:15:06 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,13 @@ typedef struct s_pos
 	float		x_intercept_v;
 	float		y_intercept_v;
 	double		ang;
+	bool		is_horz_hit;
 	int			walk_direction;
 	int			rotate_direction;
 	int			side_direction;
+	int			wall_top;
+	int			wall_bottom;
+	double		distance;
 }		t_pos;
 
 typedef struct s_img
@@ -84,43 +88,46 @@ typedef struct s_map
 	t_pos		p_pos;
 	mlx_t		*mlx;
 	t_img		img;
-	t_data		*data;
+	t_data			*data;
 }		t_map;
 
-
-void	game_loop(void *param);
-void	key_hook(mlx_key_data_t keydata, void *param);
-void	move_player(t_map *map, float delta_time);
-bool	map_has_wall_at(t_map *map, double x, double y);
-void	my_mlx_pixel_put(t_img *data, int x, int y, uint32_t color);
-t_pos	get_best_intersection(t_map *map, double r_ang);
-void	load_textures(t_map *map);
-void	draw_ceiling(t_map *map, int column, int wall_top);
-void	draw_floor(t_map *map, int column, int wall_bottom);
-void	init_horizontal_intercept(double r_ang, t_map *map);
-void	calculate_horizontal_steps(double r_ang, t_map *map);
-bool	check_horizontal_wall(t_map *map, float next_x,
-			float next_y, double r_ang);
-float	find_horizontal_intersection(t_map *map, double r_ang,
-			t_pos *horz_inter);
-float	find_horizontal_intersection(t_map *map, double r_ang,
-			t_pos *horz_inter);
-void	init_vertical_intercept(double r_ang, t_map *map);
-void	calculate_vertical_steps(double r_ang, t_map *map);
-bool	check_vertical_wall(t_map *map, float next_x,
-			float next_y, double r_ang);
-float	continue_vertical_intersection(t_map *map, double r_ang,
-			t_pos *vert_inter);
-float	find_vertical_intersection(t_map *map, double r_ang,
-			t_pos *vert_inter);
-void	init_ray_casting(double *fov, int *num_rays, double *angle_increment);
-void	clear_screen(t_map *map);
-double	calculate_ray_angle(double player_angle, double fov, double angle_increment, int column);
-void get_wall_hit_info(float horz_dist, float vert_dist, t_pos horz_inter, t_pos vert_inter, bool *is_horz_hit, t_pos *intersection,  double *distance);
-void calculate_wall_dimensions(double distance, double ray_angle, double player_angle, double fov, int *wall_top, int *wall_bottom);
-mlx_texture_t *select_texture(t_map *map, bool is_horz_hit, double ray_angle);
-int calculate_texture_x(bool is_horz_hit, t_pos intersection, mlx_texture_t *texture);
-void draw_wall_strip(t_map *map, int column, int wall_top, int wall_bottom, mlx_texture_t *texture, int tex_x);
-double normalize_angle(double r_ang);
+bool			map_has_wall_at(t_map *map, double x, double y);
+void			my_mlx_pixel_put(t_img *data, int x, int y, uint32_t color);
+t_pos			get_best_intersection(t_map *map, double r_ang);
+void			load_textures(t_map *map);
+void			draw_ceiling(t_map *map, int column);
+double			normalize_angle(double r_ang);
+void			draw_floor(t_map *map, int column);
+void			init_horizontal_intercept(double r_ang, t_map *map);
+void			calculate_horizontal_steps(double r_ang, t_map *map);
+bool			check_horizontal_wall(t_map *map, float next_x,
+					float next_y, double r_ang);
+float			find_horizontal_intersection(t_map *map, double r_ang,
+					t_pos *horz_inter);
+float			find_horizontal_intersection(t_map *map, double r_ang,
+					t_pos *horz_inter);
+void			init_vertical_intercept(double r_ang, t_map *map);
+void			calculate_vertical_steps(double r_ang, t_map *map);
+bool			check_vertical_wall(t_map *map, float next_x,
+					float next_y, double r_ang);
+float			continue_vertical_intersection(t_map *map, double r_ang,
+					t_pos *vert_inter);
+float			find_vertical_intersection(t_map *map, double r_ang,
+					t_pos *vert_inter);
+void			init_ray_casting(double *fov, int *num_rays,
+					double *angle_increment);
+void			clear_screen(t_map *map);
+double			calculate_ray_angle(double player_angle, double fov,
+					double angle_increment, int column);
+void			get_wall_hit_info(t_map *map, t_pos horz_inter,
+					t_pos vert_inter, t_pos *intersection);
+void			calculate_wall_dimensions(t_map *map, double ray_angle,
+					double player_angle, double fov);
+mlx_texture_t	*select_texture(t_map *map, double ray_angle);
+int				calculate_texture_x(t_map *map, t_pos intersection, mlx_texture_t *texture);
+void draw_wall_strip(t_map *map, int column, mlx_texture_t *texture, int tex_x);
+void game_loop(void *param);
+void key_hook(mlx_key_data_t keydata, void *param);
+void move_player(t_map *map, float delta_time);
 
 #endif

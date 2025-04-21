@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 12:58:18 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 23:26:58 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:13:14 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,20 @@ void	load_textures(t_map *map)
 	}
 }
 
-void	calculate_wall_dimensions(double distance, double ray_angle,
-			double player_angle, double fov, int *wall_top, int *wall_bottom)
+void	calculate_wall_dimensions(t_map *map, double ray_angle,
+			double player_angle, double fov)
 {
 	double	wall_height;
-
-	distance *= cos(ray_angle - player_angle); // Fisheye correction
-	wall_height = (SCALE / distance) * (W_HEIGHT / 2) / tan(fov / 2);
-	*wall_top = W_HEIGHT / 2 - (wall_height / 2);
-	*wall_bottom = W_HEIGHT / 2 + (wall_height / 2);
+	// Fisheye correction
+	map->p_pos.distance *= cos(ray_angle - player_angle);
+	wall_height = (SCALE / map->p_pos.distance) * (W_HEIGHT / 2) / tan(fov / 2);
+	map->p_pos.wall_top = W_HEIGHT / 2 - (wall_height / 2);
+	map->p_pos.wall_bottom = W_HEIGHT / 2 + (wall_height / 2);
 }
 
-mlx_texture_t	*select_texture(t_map *map, bool is_horz_hit, double ray_angle)
+mlx_texture_t	*select_texture(t_map *map, double ray_angle)
 {
-	if (is_horz_hit)
+	if (map->p_pos.is_horz_hit)
 	{
 		// Horizontal hit - north or south wall
 		return (sin(ray_angle) > 0) ? map->textures.south : map->textures.north;
@@ -65,11 +65,11 @@ mlx_texture_t	*select_texture(t_map *map, bool is_horz_hit, double ray_angle)
 }
 
 // Calculate texture x-coordinate
-int	calculate_texture_x(bool is_horz_hit, t_pos intersection, mlx_texture_t *texture)
+int	calculate_texture_x(t_map *map, t_pos intersection, mlx_texture_t *texture)
 {
 	int	tex_x;
 
-	if (is_horz_hit)
+	if (map->p_pos.is_horz_hit)
 	{
 		tex_x = (int)(intersection.x) % SCALE; // For horizontal intersections, use the x-coordinate
 	}
@@ -81,29 +81,30 @@ int	calculate_texture_x(bool is_horz_hit, t_pos intersection, mlx_texture_t *tex
 	return (tex_x);
 }
 
-void	draw_wall_strip(t_map *map, int column, int wall_top, int wall_bottom,
-				   mlx_texture_t *texture, int tex_x)
+void	draw_wall_strip(t_map *map, int column,
+			mlx_texture_t *texture, int tex_x)
 {
-int vertical_start = wall_top;
-if (vertical_start < 0)
-	vertical_start = 0;
+	int			y;
+	int			vertical_start;
+	int			vertical_end;
+	int			tex_y;
+	uint8_t		*pixel;
+	uint32_t	color;
 
-int vertical_end = wall_bottom;
-if (vertical_end > W_HEIGHT)
-	vertical_end = W_HEIGHT;
-
-int y = vertical_start;
-while (y < vertical_end)
-{
-	// Calculate texture y-coordinate
-	int tex_y = ((y - wall_top) * texture->height) / (wall_bottom - wall_top);
-
-	// Get color from texture
-	uint8_t *pixel = &texture->pixels[(tex_y * texture->width + tex_x) * 4];
-	uint32_t color = (pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | pixel[3];
-
-	my_mlx_pixel_put(&map->img, column, y, color);
-	y++;
-}
+	vertical_start = map->p_pos.wall_top;
+	if (vertical_start < 0)
+		vertical_start = 0;
+	vertical_end = map->p_pos.wall_bottom;
+	if (vertical_end > W_HEIGHT)
+		vertical_end = W_HEIGHT;
+	y = vertical_start;
+	while (y < vertical_end)
+	{
+		tex_y = ((y - map->p_pos.wall_top) * texture->height) / (map->p_pos.wall_bottom - map->p_pos.wall_top);
+		pixel = &texture->pixels[(tex_y * texture->width + tex_x) * 4];
+		color = (pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | pixel[3];
+		my_mlx_pixel_put(&map->img, column, y, color);
+		y++;
+	}
 
 }

@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 03:20:01 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 23:19:16 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:08:48 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ t_pos	get_best_intersection(t_map *map, double r_ang)
 	t_pos	vert_inter;
 
 	r_ang = normalize_angle(r_ang);
-	map->p_pos.horz_dist = find_horizontal_intersection(map, r_ang, &horz_inter);
+	map->p_pos.horz_dist = find_horizontal_intersection(map, r_ang,
+			&horz_inter);
 	map->p_pos.vert_dist = find_vertical_intersection(map, r_ang, &vert_inter);
 	if (map->p_pos.horz_dist < map->p_pos.vert_dist)
 		intersection = horz_inter;
@@ -39,26 +40,24 @@ t_pos	get_best_intersection(t_map *map, double r_ang)
 
 void	process_ray(t_map *map, int column, double ray_angle)
 {
-	t_pos	horz_inter;
-	t_pos	vert_inter;
-	int		wall_top;
-	int		wall_bottom;
-	bool	is_horz_hit;
-	t_pos	intersection;
-	double distance;
-	mlx_texture_t *texture;
-	int tex_x;
-	double fov = 60 * (M_PI / 180);
-	
-	map->p_pos.horz_dist = find_horizontal_intersection(map, ray_angle, &horz_inter);
-	map->p_pos.vert_dist = find_vertical_intersection(map, ray_angle, &vert_inter);
-	get_wall_hit_info(map->p_pos.horz_dist, map->p_pos.vert_dist, horz_inter, vert_inter, &is_horz_hit, &intersection, &distance);
-	calculate_wall_dimensions(distance, ray_angle, map->p_pos.ang, fov, &wall_top, &wall_bottom);
-	texture = select_texture(map, is_horz_hit, ray_angle);
-	tex_x = calculate_texture_x(is_horz_hit, intersection, texture);
-	draw_wall_strip(map, column, wall_top, wall_bottom, texture, tex_x);
-	draw_ceiling(map, column, wall_top);
-	draw_floor(map, column, wall_bottom);
+	t_pos			horz_inter;
+	t_pos			vert_inter;
+	t_pos			intersection;
+	mlx_texture_t 	*texture;
+	double 			fov;
+
+	fov = 60 * (M_PI / 180);
+	map->p_pos.horz_dist = find_horizontal_intersection(map, ray_angle,
+			&horz_inter);
+	map->p_pos.vert_dist = find_vertical_intersection(map, ray_angle,
+			&vert_inter);
+	get_wall_hit_info(map, horz_inter, vert_inter, &intersection);
+	calculate_wall_dimensions(map, ray_angle, map->p_pos.ang, fov);
+	texture = select_texture(map, ray_angle);
+	draw_wall_strip(map, column, texture,
+		calculate_texture_x(map, intersection, texture));
+	draw_ceiling(map, column);
+	draw_floor(map, column);
 }
 
 void	game_loop(void *param)
