@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:17:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 23:23:14 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:27:01 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,26 @@ bool	check_vertical_wall(t_map *map, float next_x,
 	return (false);
 }
 
+bool	check_and_update_vertical_intercept(t_map *map, double r_ang,
+		t_pos *vert_inter)
+{
+	if (check_vertical_wall(map, map->p_pos.x_intercept_v,
+			map->p_pos.y_intercept_v, r_ang))
+	{
+		vert_inter->x = map->p_pos.x_intercept_v;
+		vert_inter->y = map->p_pos.y_intercept_v;
+		return (true);
+	}
+	else
+	{
+		map->p_pos.x_intercept_v += map->p_pos.x_step_v;
+		map->p_pos.y_intercept_v += map->p_pos.y_step_v;
+		return (false);
+	}
+}
+
 float	continue_vertical_intersection(t_map *map, double r_ang,
-	t_pos *vert_inter)
+		t_pos *vert_inter)
 {
 	bool	hit_wall;
 	float	vert_dist;
@@ -61,29 +79,12 @@ float	continue_vertical_intersection(t_map *map, double r_ang,
 		&& map->p_pos.y_intercept_v >= 0
 		&& map->p_pos.y_intercept_v < map->map_h * SCALE)
 	{
-		if (check_vertical_wall(map, map->p_pos.x_intercept_v,
-				map->p_pos.y_intercept_v, r_ang))
+		hit_wall = check_and_update_vertical_intercept(map, r_ang, vert_inter);
+		if (hit_wall)
 		{
-			hit_wall = true;
-			vert_inter->x = map->p_pos.x_intercept_v;
-			vert_inter->y = map->p_pos.y_intercept_v;
 			vert_dist = sqrt(pow(vert_inter->x - map->p_pos.x, 2)
 					+ pow(vert_inter->y - map->p_pos.y, 2));
 		}
-		else
-		{
-			map->p_pos.x_intercept_v += map->p_pos.x_step_v;
-			map->p_pos.y_intercept_v += map->p_pos.y_step_v;
-		}
 	}
 	return (vert_dist);
-}
-
-float	find_vertical_intersection(t_map *map, double r_ang, t_pos *vert_inter)
-{
-	if (cos(r_ang) == 0)
-		return (INFINITY);
-	init_vertical_intercept(r_ang, map);
-	calculate_vertical_steps(r_ang, map);
-	return (continue_vertical_intersection(map, r_ang, vert_inter));
 }

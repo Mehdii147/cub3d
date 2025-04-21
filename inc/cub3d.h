@@ -6,13 +6,12 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:01:12 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/21 11:15:06 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:30:19 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-
 
 # include "../MLX/MLX42.h"
 # include <errno.h>
@@ -27,6 +26,7 @@
 
 # define SCALE 64
 # define FOV 60
+# define FOV_R 1.0471975512
 # define SPEED 200
 # define ROTATE 4
 # define W_WIDTH 900
@@ -77,17 +77,17 @@ typedef struct s_texture
 
 typedef struct s_map
 {
-	int			map_h;
-	int			map_w;
-	char		*n_textures;
-	char		*s_textures;
-	char		*e_textures;
-	char		*w_textures;
-	t_texture	textures;
-	char		**map;
-	t_pos		p_pos;
-	mlx_t		*mlx;
-	t_img		img;
+	int				map_h;
+	int				map_w;
+	char			*n_textures;
+	char			*s_textures;
+	char			*e_textures;
+	char			*w_textures;
+	t_texture		textures;
+	char			**map;
+	t_pos			p_pos;
+	mlx_t			*mlx;
+	t_img			img;
 	t_data			*data;
 }		t_map;
 
@@ -104,7 +104,7 @@ bool			check_horizontal_wall(t_map *map, float next_x,
 					float next_y, double r_ang);
 float			find_horizontal_intersection(t_map *map, double r_ang,
 					t_pos *horz_inter);
-float			find_horizontal_intersection(t_map *map, double r_ang,
+float			continue_horizontal_intersection(t_map *map, double r_ang,
 					t_pos *horz_inter);
 void			init_vertical_intercept(double r_ang, t_map *map);
 void			calculate_vertical_steps(double r_ang, t_map *map);
@@ -114,20 +114,20 @@ float			continue_vertical_intersection(t_map *map, double r_ang,
 					t_pos *vert_inter);
 float			find_vertical_intersection(t_map *map, double r_ang,
 					t_pos *vert_inter);
-void			init_ray_casting(double *fov, int *num_rays,
-					double *angle_increment);
 void			clear_screen(t_map *map);
-double			calculate_ray_angle(double player_angle, double fov,
+double			calculate_ray_angle(double player_angle,
 					double angle_increment, int column);
 void			get_wall_hit_info(t_map *map, t_pos horz_inter,
 					t_pos vert_inter, t_pos *intersection);
 void			calculate_wall_dimensions(t_map *map, double ray_angle,
-					double player_angle, double fov);
+					double player_angle);
 mlx_texture_t	*select_texture(t_map *map, double ray_angle);
-int				calculate_texture_x(t_map *map, t_pos intersection, mlx_texture_t *texture);
-void draw_wall_strip(t_map *map, int column, mlx_texture_t *texture, int tex_x);
-void game_loop(void *param);
-void key_hook(mlx_key_data_t keydata, void *param);
-void move_player(t_map *map, float delta_time);
+int				calculate_texture_x(t_map *map, t_pos intersection,
+					mlx_texture_t *texture);
+void			draw_wall_strip(t_map *map, int column,
+					mlx_texture_t *texture, int tex_x);
+void			game_loop(void *param);
+void			key_hook(mlx_key_data_t keydata, void *param);
+void			move_player(t_map *map, float delta_time);
 
 #endif

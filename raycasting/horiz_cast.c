@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:16:50 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 23:23:59 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:25:25 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,24 @@ bool	check_horizontal_wall(t_map *map, float next_x,
 	return (false);
 }
 
+bool	check_and_update_horizontal_intercept(t_map *map, double r_ang,
+		t_pos *horz_inter)
+{
+	if (check_horizontal_wall(map, map->p_pos.x_intercept,
+			map->p_pos.y_intercept, r_ang))
+	{
+		horz_inter->x = map->p_pos.x_intercept;
+		horz_inter->y = map->p_pos.y_intercept;
+		return (true);
+	}
+	else
+	{
+		map->p_pos.x_intercept += map->p_pos.x_step;
+		map->p_pos.y_intercept += map->p_pos.y_step;
+		return (false);
+	}
+}
+
 float	continue_horizontal_intersection(t_map *map, double r_ang,
 		t_pos *horz_inter)
 {
@@ -61,30 +79,13 @@ float	continue_horizontal_intersection(t_map *map, double r_ang,
 		&& map->p_pos.y_intercept >= 0
 		&& map->p_pos.y_intercept < map->map_h * SCALE)
 	{
-		if (check_horizontal_wall(map, map->p_pos.x_intercept,
-				map->p_pos.y_intercept, r_ang))
+		hit_wall = check_and_update_horizontal_intercept(map,
+				r_ang, horz_inter);
+		if (hit_wall)
 		{
-			hit_wall = true;
-			horz_inter->x = map->p_pos.x_intercept;
-			horz_inter->y = map->p_pos.y_intercept;
 			horz_dist = sqrt(pow(horz_inter->x - map->p_pos.x, 2)
 					+ pow(horz_inter->y - map->p_pos.y, 2));
 		}
-		else
-		{
-			map->p_pos.x_intercept += map->p_pos.x_step;
-			map->p_pos.y_intercept += map->p_pos.y_step;
-		}
 	}
 	return (horz_dist);
-}
-
-float	find_horizontal_intersection(t_map *map, double r_ang,
-		t_pos *horz_inter)
-{
-	if (sin(r_ang) == 0)
-		return (INFINITY);
-	init_horizontal_intercept(r_ang, map);
-	calculate_horizontal_steps(r_ang, map);
-	return (continue_horizontal_intersection(map, r_ang, horz_inter));
 }
