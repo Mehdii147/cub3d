@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:01:12 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/21 14:30:19 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:34:25 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,5 +129,8 @@ void			draw_wall_strip(t_map *map, int column,
 void			game_loop(void *param);
 void			key_hook(mlx_key_data_t keydata, void *param);
 void			move_player(t_map *map, float delta_time);
+void			initialize_position(t_data *data, double *x, double *y);
+double			update_angle(t_data *data);
+void			exact_angle(t_data *data, int i, int j, double *angle);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:06:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/20 17:15:17 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:32:20 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ void	init_map(t_map *map, t_data *data)
 	map->map_h = map->data->height;
 	map->map_w = map->data->width;
 	map->map = data->map;
-	map->p_pos.x = (map->map_w / 2) * SCALE + SCALE / 2;
-	map->p_pos.y = (map->map_h / 2) * SCALE - SCALE / 2;
-	map->p_pos.ang = 0;
+	initialize_position(data, &map->p_pos.x, &map->p_pos.y);
+	map->p_pos.ang = update_angle(data);
 	map->p_pos.walk_direction = 0;
 	map->p_pos.side_direction = 0;
 	map->p_pos.rotate_direction = 0;
