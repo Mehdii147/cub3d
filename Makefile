@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+         #
+#    By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/14 02:35:02 by ehafiane          #+#    #+#              #
-#    Updated: 2025/04/21 15:54:14 by ehafiane         ###   ########.fr        #
+#    Updated: 2025/04/24 00:58:54 by ehafiane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = cub3d
+NAME = cub3D
 CC = cc
-CFLAGS = -Wall -Wextra -Werror  -std=c11 -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror  
 # Add architecture flag to match libraries
 ARCH = -arch x86_64
 mlx =  -I./MLX -I./glfw-3.4.bin.MACOS/include -L./MLX -lmlx42 -L./glfw-3.4.bin.MACOS/lib-x86_64 -lglfw.3 -Wl,-rpath,./glfw-3.4.bin.MACOS/lib-x86_64 -framework Cocoa -framework OpenGL -framework IOKit

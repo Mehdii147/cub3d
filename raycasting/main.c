@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:06:35 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/22 20:32:20 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/26 22:47:33 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,26 @@ int	initialize_mlx(t_map *map)
 	return (EXIT_SUCCESS);
 }
 
+// void f()
+// {
+// 	system("leaks cub3D");
+// }
+
 int	main(int ac, char **av)
 {
 	t_map	map;
 	t_cube	cube;
 
+	// atexit(f);
 	if (ac != 2)
 		ft_error_message("num of args isn't correct.Usage: ./cub3D <map_file>");
-	get_cub(&cube);
 	cube.data = ft_parsing(av);
 	initialize_mlx(&map);
 	init_map(&map, cube.data);
 	mlx_key_hook(map.mlx, key_hook, &map);
 	mlx_loop_hook(map.mlx, game_loop, &map);
 	mlx_loop(map.mlx);
+	//here
 	mlx_delete_texture(map.textures.north);
 	mlx_delete_texture(map.textures.south);
 	mlx_delete_texture(map.textures.east);
