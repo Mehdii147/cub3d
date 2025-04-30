@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 12:58:18 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/26 23:49:39 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:58:03 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,13 @@
 void	load_textures(t_map *map)
 {
 	map->textures.north = mlx_load_png(map->data->no);
-	if (!map->textures.north)
-	{
-		fprintf(stderr, "Failed to load north texture");
-		exit(EXIT_FAILURE);
-	}
 	map->textures.south = mlx_load_png(map->data->so);
-	if (!map->textures.south)
-	{
-		fprintf(stderr, "Failed to load south texture");
-		exit(EXIT_FAILURE);
-	}
 	map->textures.east = mlx_load_png(map->data->we);
-	if (!map->textures.east)
-	{
-		fprintf(stderr, "Failed to load east texture");
-		exit(EXIT_FAILURE);
-	}
 	map->textures.west = mlx_load_png(map->data->ea);
-	if (!map->textures.west)
+	if (!map->textures.north || !map->textures.south
+		|| !map->textures.east || !map->textures.west)
 	{
-		fprintf(stderr, "Failed to load west texture");
+		fprintf(stderr, "Failed to load texture");
 		exit(EXIT_FAILURE);
 	}
 }
