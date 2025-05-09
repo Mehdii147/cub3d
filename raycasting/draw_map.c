@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:08:30 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/26 23:41:43 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:23:55 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	draw_ceiling(t_map *map, int column)
 	}
 }
 
-void	draw_floor(t_map *map, int column)
+void	draw_floor(t_map *map	, int column)
 {
 	int	y;
 

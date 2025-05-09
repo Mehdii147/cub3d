@@ -6,11 +6,24 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:09:28 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/26 23:32:23 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:08:54 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
+
+bool	can_move_to(t_map *map, double new_x, double new_y, int walk_direction, int side_direction)
+{
+	if (map_has_wall_at(map, new_x, new_y))
+		return (false);
+	if (walk_direction != 0)
+		if (!map_has_wall_at(map, new_x, map->p_pos.y))
+			return (true);
+	if (side_direction != 0)
+		if (!map_has_wall_at(map, map->p_pos.x, new_y))
+			return (true);
+	return (!map_has_wall_at(map, new_x, new_y));
+}
 
 void	calculate_new_position(t_map *map, float delta_time,
 		double *new_x, double *new_y)
@@ -45,11 +58,11 @@ void	move_player(t_map *map, float delta_time)
 	map->p_pos.ang += map->p_pos.rotate_direction * ROTATE * delta_time;
 	map->p_pos.ang = normalize_angle(map->p_pos.ang);
 	calculate_new_position(map, delta_time, &new_x, &new_y);
-	if (!map_has_wall_at(map, new_x, new_y))
-	{
-		map->p_pos.x = new_x;
-		map->p_pos.y = new_y;
-	}
+	
+	if (can_move_to(map, new_x, map->p_pos.y, map->p_pos.walk_direction, 0))
+			map->p_pos.x = new_x;
+	if (can_move_to(map, map->p_pos.x, new_y, 0, map->p_pos.side_direction))
+			map->p_pos.y = new_y;
 }
 
 void	handle_movement_keys(mlx_key_data_t keydata, t_map *map)

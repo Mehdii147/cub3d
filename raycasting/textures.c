@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 12:58:18 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/04/30 10:58:03 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:49:22 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ mlx_texture_t	*select_texture(t_map *map, double ray_angle)
 	}
 	else
 	{
-		if (cos(ray_angle) > 0)
+		if (cos(ray_angle) < 0)
 			return (map->textures.east);
 		else
 			return (map->textures.west);
