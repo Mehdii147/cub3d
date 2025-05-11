@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:01:12 by ehafiane          #+#    #+#             */
-/*   Updated: 2025/05/09 10:34:02 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:53:38 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,6 @@
 # define W_WIDTH 900
 # define W_HEIGHT 900
 
-typedef struct s_vars
-{
-	mlx_t	*mlx;
-	mlx_t	*win;
-}		t_vars;
-
 typedef struct s_pos
 {
 	double		x;
@@ -48,10 +42,6 @@ typedef struct s_pos
 	float		y_step;
 	float		x_intercept;
 	float		y_intercept;
-	float		x_step_v;
-	float		y_step_v;
-	float		x_intercept_v;
-	float		y_intercept_v;
 	double		ang;
 	bool		is_horz_hit;
 	int			walk_direction;
