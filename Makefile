@@ -6,7 +6,7 @@
 #    By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/14 02:35:02 by ehafiane          #+#    #+#              #
-#    Updated: 2025/04/24 00:58:54 by ehafiane         ###   ########.fr        #
+#    Updated: 2025/05/12 19:58:47 by ehafiane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(ARCH) $(OBJ) $(mlx) -o $(NAME)
 	@echo "Compiled successfully"
 
-$(OBJDIR)/%.o: %.c inc/cub3d.h | $(OBJDIR)
+$(OBJDIR)/%.o: %.c inc/cub3d.h parsing/cub.h | $(OBJDIR)
 	@$(CC) $(CFLAGS) $(ARCH) -c $< -o $@
 
 $(OBJDIR):

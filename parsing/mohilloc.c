@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:10:49 by amandour          #+#    #+#             */
-/*   Updated: 2025/04/24 01:07:29 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:17:10 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,14 @@ t_heap	*heap_new(void *content)
 	return (head);
 }
 
-t_cube	*get_cub(t_cube *cub)
-{
-	static t_cube	*cub_s;
-
-	cub_s = (t_cube *)malloc(sizeof(t_cube));
-	cub_s->heap = NULL;
-	if (cub)
-		cub_s = cub;
-	return (cub_s);
-}
-
 void	*mohi_bel_malloc(size_t __size)
 {
+	(void)__size;
 	void	*__ptr;
 	t_heap	*__node;
 	t_cube	*__cub;
 
-	__cub = get_cub(NULL);
+	__cub = (t_cube *)malloc(sizeof(t_cube));
 	__ptr = malloc(__size);
 	if (__ptr == NULL)
 	{
