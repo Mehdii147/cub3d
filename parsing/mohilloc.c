@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:10:49 by amandour          #+#    #+#             */
-/*   Updated: 2025/05/12 20:17:10 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/05/21 19:28:01 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_heap	*heap_new(void *content)
 
 void	*mohi_bel_malloc(size_t __size)
 {
-	(void)__size;
 	void	*__ptr;
 	t_heap	*__node;
 	t_cube	*__cub;
